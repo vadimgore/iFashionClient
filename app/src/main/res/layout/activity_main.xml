@@ -2,44 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/splash_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/device_registration"
+        android:scaleType="center">
+    </ImageView>
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/reg_status"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:layout_marginTop="50px"
         android:textColor="@color/blue"
         android:textSize="70px" >
-    </TextView>
-    <TextView
-        android:id="@+id/customer_profile"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10px"
-        android:textSize="30px"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/blue">
-    </TextView>
-    <TextView
-        android:id="@+id/customer_style"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10px"
-        android:textSize="30px"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/blue">
-    </TextView>
-    <TextView
-        android:id="@+id/recent_purchases"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10px"
-        android:textSize="30px"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/red">
     </TextView>
 
 

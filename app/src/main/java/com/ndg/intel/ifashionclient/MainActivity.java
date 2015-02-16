@@ -1,29 +1,29 @@
 package com.ndg.intel.ifashionclient;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
+
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
-    public static final String EXTRA_MESSAGE = "message";
+    //public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
 
@@ -35,15 +35,11 @@ public class MainActivity extends ActionBarActivity {
      * from the API Console, as described in "Getting Started."
      */
     String SENDER_ID = "1032714926342";
-
-    TextView mTitle = null;
-    TextView mCustomerProfile = null;
-    TextView mCustomerStyle = null;
-    TextView mRecentPurchases = null;
+    TextView mRegStatus = null;
 
     GoogleCloudMessaging gcm;
-    AtomicInteger msgId = new AtomicInteger();
-    SharedPreferences prefs;
+    //AtomicInteger msgId = new AtomicInteger();
+    //SharedPreferences prefs;
     Context context;
 
     String regid;
@@ -54,10 +50,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize text views
-        mTitle = (TextView) findViewById(R.id.title);
-        mCustomerProfile = (TextView) findViewById(R.id.customer_profile);
-        mCustomerStyle = (TextView) findViewById(R.id.customer_style);
-        mRecentPurchases = (TextView) findViewById(R.id.recent_purchases);
+        mRegStatus = (TextView) findViewById(R.id.reg_status);
 
         // Get application context
         context = getApplicationContext();
@@ -72,10 +65,13 @@ public class MainActivity extends ActionBarActivity {
             if (regid.isEmpty()) {
                 registerInBackground();
             }
+            else {
+                mRegStatus.setText("Device already registered");
+                delayedFinish();
+            }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
-
     }
 
     @Override
@@ -187,13 +183,13 @@ public class MainActivity extends ActionBarActivity {
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
-                String msg = "";
+                String msg;
                 try {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
                     regid = gcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID=" + regid;
+                    msg = "New device has been registered successfully";
 
                     // You should send the registration ID to your server over HTTP,
                     // so it can use GCM/HTTP or CCS to send messages to your app.
@@ -218,8 +214,9 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             protected void onPostExecute(String msg) {
-                Toast.makeText(getApplicationContext(), "onPostExecute: " + msg,
-                        Toast.LENGTH_LONG).show();
+                mRegStatus.setText(msg);
+                Log.i(TAG, "onPostExecute: " + msg);
+                delayedFinish();
             }
         }.execute(null, null, null);
     }
@@ -249,5 +246,16 @@ public class MainActivity extends ActionBarActivity {
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.commit();
+    }
+
+    private void delayedFinish() {
+        Handler handler = new Handler();
+        final Runnable r = new Runnable() {
+            public void run() {
+                finish();
+            }
+        };
+
+        handler.postDelayed(r, 5000);
     }
 }
