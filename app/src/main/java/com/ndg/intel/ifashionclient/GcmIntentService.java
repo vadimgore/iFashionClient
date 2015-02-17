@@ -75,7 +75,8 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.gcm_notification)
-                        .setContentTitle("iFashion Notification");
+                        .setContentTitle("iFashion Notification")
+                        .setAutoCancel(true);
 
 /*                        .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(msg))
